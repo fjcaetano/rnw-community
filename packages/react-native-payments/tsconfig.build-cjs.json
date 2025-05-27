@@ -2,14 +2,12 @@
     "extends": "../../tsconfig.build-cjs.json",
     "compilerOptions": {
         "outDir": "./dist/cjs",
-        "lib": ["DOM"]
+        "lib": ["DOM"],
+        "module": "CommonJS",
+        "target": "ES2017",
+        "esModuleInterop": false,
+        "allowSyntheticDefaultImports": false
     },
-    "include": [
-        "./src"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist",
-        "**/*.spec.*"
-    ]
+    "include": ["./src"],
+    "exclude": ["node_modules", "dist", "**/*.spec.*"]
 }

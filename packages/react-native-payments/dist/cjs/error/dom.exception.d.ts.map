@@ -1,0 +1,1 @@
+{"version":3,"file":"dom.exception.d.ts","sourceRoot":"","sources":["../../../src/error/dom.exception.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,iBAAiB,EAAE,MAAM,6BAA6B,CAAC;AAEhE,OAAO,EAAE,aAAa,EAAE,MAAM,kBAAkB,CAAC;AAGjD,qBAAa,YAAa,SAAQ,aAAa;IAC3C,OAAO,CAAC,MAAM,CAAC,QAAQ,CAAC,QAAQ,CAO9B;gBAEU,SAAS,EAAE,iBAAiB;CAG3C"}

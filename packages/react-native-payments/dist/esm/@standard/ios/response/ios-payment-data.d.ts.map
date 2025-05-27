@@ -1,0 +1,1 @@
+{"version":3,"file":"ios-payment-data.d.ts","sourceRoot":"","sources":["../../../../../src/@standard/ios/response/ios-payment-data.ts"],"names":[],"mappings":"AAMA,OAAO,KAAK,EAAE,oBAAoB,EAAE,MAAM,2BAA2B,CAAC;AAMtE,MAAM,WAAW,cAAc;IAE3B,IAAI,EAAE,MAAM,CAAC;IACb,MAAM,EAAE,oBAAoB,CAAC;IAC7B,SAAS,EAAE,MAAM,CAAC;IAClB,OAAO,EAAE,MAAM,CAAC;CACnB;AACD,eAAO,MAAM,mBAAmB,EAAE,cAKjC,CAAC"}

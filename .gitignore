@@ -23,7 +23,6 @@ report
 *.d.ts
 *.jsx.map
 *.js.map
-dist
 junit.xml
 logs.txt
 __coverage__

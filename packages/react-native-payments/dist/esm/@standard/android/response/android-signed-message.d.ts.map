@@ -1,0 +1,1 @@
+{"version":3,"file":"android-signed-message.d.ts","sourceRoot":"","sources":["../../../../../src/@standard/android/response/android-signed-message.ts"],"names":[],"mappings":"AACA,MAAM,WAAW,oBAAoB;IAEjC,gBAAgB,EAAE,MAAM,CAAC;IACzB,kBAAkB,EAAE,MAAM,CAAC;IAC3B,GAAG,EAAE,MAAM,CAAC;CACf;AAED,eAAO,MAAM,yBAAyB,EAAE,oBAIvC,CAAC"}

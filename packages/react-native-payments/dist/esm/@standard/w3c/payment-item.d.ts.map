@@ -1,0 +1,1 @@
+{"version":3,"file":"payment-item.d.ts","sourceRoot":"","sources":["../../../../src/@standard/w3c/payment-item.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,qBAAqB,EAAE,MAAM,2BAA2B,CAAC;AAGvE,MAAM,WAAW,WAAW;IACxB,MAAM,EAAE,qBAAqB,CAAC;IAC9B,KAAK,EAAE,MAAM,CAAC;IACd,OAAO,CAAC,EAAE,OAAO,CAAC;CACrB"}

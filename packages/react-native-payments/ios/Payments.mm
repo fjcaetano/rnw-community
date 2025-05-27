@@ -458,3 +458,4 @@ RCT_EXPORT_METHOD(canMakePayments: (NSString *)methodDataString
 #endif
 
 @end
+

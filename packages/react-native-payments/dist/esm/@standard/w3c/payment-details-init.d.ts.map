@@ -1,0 +1,1 @@
+{"version":3,"file":"payment-details-init.d.ts","sourceRoot":"","sources":["../../../../src/@standard/w3c/payment-details-init.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,kBAAkB,EAAE,MAAM,wBAAwB,CAAC;AACjE,OAAO,KAAK,EAAE,WAAW,EAAE,MAAM,gBAAgB,CAAC;AAGlD,MAAM,WAAW,kBAAmB,SAAQ,kBAAkB;IAC1D,EAAE,CAAC,EAAE,MAAM,CAAC;IACZ,KAAK,EAAE,WAAW,CAAC;CACtB"}
