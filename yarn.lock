@@ -6775,7 +6775,7 @@ __metadata:
   resolution: "@rnw-community/react-native-payments@workspace:packages/react-native-payments"
   dependencies:
     "@expo/config-plugins": "npm:^9.0.14"
-    "@rnw-community/shared": "workspace:*"
+    "@rnw-community/shared": "https://gitpkg.vercel.app/fjcaetano/rnw-community/packages/shared?feat/shipping-options"
     "@types/validator": "npm:^13.7.17"
     react: "npm:^18.3.1"
     react-native: "npm:^0.76.1"
@@ -6805,6 +6805,13 @@ __metadata:
     rxjs: ^7.8.1
   languageName: unknown
   linkType: soft
+
+"@rnw-community/shared@https://gitpkg.vercel.app/fjcaetano/rnw-community/packages/shared?feat/shipping-options":
+  version: 1.1.0
+  resolution: "@rnw-community/shared@https://gitpkg.vercel.app/fjcaetano/rnw-community/packages/shared?feat/shipping-options"
+  checksum: 10/9ad62087a4842ef596802840da45205a6b8d3a809175b00ea79f4a1c299e7beb2a586b231cec1bfbead843492f70dbbfb202967749736f3166e80b2f43cdf150
+  languageName: node
+  linkType: hard
 
 "@rnw-community/shared@workspace:*, @rnw-community/shared@workspace:packages/shared":
   version: 0.0.0-use.local
