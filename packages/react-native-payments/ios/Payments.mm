@@ -126,6 +126,7 @@ RCT_EXPORT_METHOD(show:(NSString *)methodDataString
     // HINT: ShippingOptions is not a part of the W3C Spec anymore
     // https://developer.mozilla.org/en-US/docs/Web/API/PaymentRequest/shippingOption
     // https://developer.mozilla.org/en-US/docs/Web/API/PaymentRequest/shippingAddress
+    paymentRequest.shippingMethods = [self getPaymentShippingMethodsFromDetails:details];
 
     // https://developer.apple.com/documentation/passkit/pkpaymentrequest/2865928-requiredbillingcontactfields?language=objc
     if(methodData[@"requiredBillingContactFields"]) {
@@ -326,6 +327,44 @@ RCT_EXPORT_METHOD(canMakePayments: (NSString *)methodDataString
     [paymentSummaryItems addObject: [self convertDisplayItemToPaymentSummaryItem:total]];
 
     return paymentSummaryItems;
+}
+
+- (PKShippingMethod *_Nonnull)convertShippingMethod:(NSDictionary *_Nonnull)shippingOption
+{
+    NSDecimalNumber *amount = [NSDecimalNumber decimalNumberWithString:shippingOption[@"amount"][@"value"]];
+    PKShippingMethod *shippingMethod = [PKShippingMethod summaryItemWithLabel:shippingOption[@"label"] amount:amount];
+
+    shippingMethod.identifier = shippingOption[@"id"];
+    shippingMethod.detail = shippingOption[@"detail"];
+
+    NSDictionary *dateRange = shippingOption[@"dateRange"];
+    if (dateRange)  {
+        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+
+        NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[dateRange[@"startDate"] doubleValue]];
+        NSDateComponents *startDateComponents = [calendar components:NSUIntegerMax fromDate:startDate];
+
+        NSDate *endDate = [NSDate dateWithTimeIntervalSince1970:[dateRange[@"endDate"] doubleValue]];
+        NSDateComponents *endDateComponents = [calendar components:NSUIntegerMax fromDate:endDate];
+
+        shippingMethod.dateComponentsRange = [[PKDateComponentsRange alloc] initWithStartDateComponents:startDateComponents endDateComponents:endDateComponents];
+    }
+
+    return shippingMethod;
+}
+
+- (NSArray<PKShippingMethod *> *_Nonnull)getPaymentShippingMethodsFromDetails:(NSDictionary *_Nonnull)details
+{
+    NSMutableArray <PKShippingMethod *> *paymentShippingOptions = [NSMutableArray array];
+
+    NSArray *shippingOptions = details[@"shippingOptions"];
+    if (shippingOptions.count > 0) {
+        for (NSDictionary *shippingOption in shippingOptions) {
+            [paymentShippingOptions addObject:[self convertShippingMethod:shippingOption]];
+        }
+    }
+
+    return paymentShippingOptions;
 }
 
 - (PKPaymentNetwork)paymentNetworkFromString:(NSString *)paymentNetworkString {

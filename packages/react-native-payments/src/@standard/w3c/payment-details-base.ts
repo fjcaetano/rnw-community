@@ -5,4 +5,5 @@ import type { PaymentItem } from './payment-item';
 export interface PaymentDetailsBase {
     displayItems?: PaymentItem[];
     modifiers?: PaymentDetailsModifier[];
+    shippingOptions?: PaymentShippingOption[];
 }
