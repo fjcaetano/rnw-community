@@ -42,6 +42,8 @@ export class PaymentRequest {
     updating = false;
     state: 'closed' | 'created' | 'interactive' = 'created';
 
+    onUpdateShippingMethod: ((shippingMethodId: string) => Promise<PaymentItem[]>) | undefined = undefined;
+
     // Internal Slots https://www.w3.org/TR/payment-request/#internal-slots
     private readonly serializedMethodData: string;
     private readonly platformMethodData: AndroidPaymentMethodDataDataInterface | IosPaymentMethodDataDataInterface;
@@ -107,6 +109,8 @@ export class PaymentRequest {
                           }
                         : this.details;
 
+                this.resetShippingMethodUpdater();
+
                 NativePayments.show(this.serializedMethodData, details)
                     .then(jsonDetails => {
                         resolve(this.handleAccept(jsonDetails));
@@ -134,6 +138,16 @@ export class PaymentRequest {
         this.state = 'closed';
 
         this.acceptPromiseRejecter(new DOMException(PaymentsErrorEnum.AbortError));
+    }
+
+    private resetShippingMethodUpdater() {
+        if (!this.onUpdateShippingMethod) return;
+
+        const cb = this.onUpdateShippingMethod;
+        NativePayments.onUpdateShippingMethod(async (_, shippingMethodId) => {
+            NativePayments.updateDisplayItems(await cb(shippingMethodId));
+            this.resetShippingMethodUpdater();
+        });
     }
 
     private handleAccept(details: string): AndroidPaymentResponse | IosPaymentResponse {

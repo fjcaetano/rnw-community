@@ -13,6 +13,8 @@ export interface Spec extends TurboModule {
     complete: (paymentComplete: string) => Promise<void>;
     // eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
     show: (methodData: string, details: Object) => Promise<string>;
+    onUpdateShippingMethod: (cb: (error: Object, shippingMethodId: string) => void) => void;
+    updateDisplayItems: (displayItems: PaymentItem[]) => void;
 }
 
 // ts-prune-ignore-next

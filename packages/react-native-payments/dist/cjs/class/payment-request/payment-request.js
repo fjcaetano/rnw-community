@@ -35,6 +35,7 @@ class PaymentRequest {
         this.details = details;
         this.updating = false;
         this.state = 'created';
+        this.onUpdateShippingMethod = undefined;
         this.acceptPromiseRejecter = shared_1.emptyFn;
         // 3. Establish the request's id:
         if (!(0, shared_1.isNotEmptyString)(details.id)) {
@@ -71,6 +72,7 @@ class PaymentRequest {
                 // HINT: We need to pass Android environment configuration to native module via details
                 const details = react_native_1.Platform.OS === 'android'
                     ? Object.assign(Object.assign({}, this.details), { environment: this.platformMethodData.environment }) : this.details;
+                this.resetShippingMethodUpdater();
                 native_payments_1.NativePayments.show(this.serializedMethodData, details)
                     .then(jsonDetails => {
                     resolve(this.handleAccept(jsonDetails));
@@ -94,6 +96,15 @@ class PaymentRequest {
         });
         this.state = 'closed';
         this.acceptPromiseRejecter(new dom_exception_1.DOMException(payments_error_enum_1.PaymentsErrorEnum.AbortError));
+    }
+    resetShippingMethodUpdater() {
+        if (!this.onUpdateShippingMethod)
+            return;
+        const cb = this.onUpdateShippingMethod;
+        native_payments_1.NativePayments.onUpdateShippingMethod(async (_, shippingMethodId) => {
+            native_payments_1.NativePayments.updateDisplayItems(await cb(shippingMethodId));
+            this.resetShippingMethodUpdater();
+        });
     }
     handleAccept(details) {
         try {

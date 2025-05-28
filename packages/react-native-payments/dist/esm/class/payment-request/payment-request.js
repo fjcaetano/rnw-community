@@ -32,6 +32,7 @@ export class PaymentRequest {
         this.details = details;
         this.updating = false;
         this.state = 'created';
+        this.onUpdateShippingMethod = undefined;
         this.acceptPromiseRejecter = emptyFn;
         // 3. Establish the request's id:
         if (!isNotEmptyString(details.id)) {
@@ -72,6 +73,7 @@ export class PaymentRequest {
                         environment: this.platformMethodData.environment,
                     }
                     : this.details;
+                this.resetShippingMethodUpdater();
                 NativePayments.show(this.serializedMethodData, details)
                     .then(jsonDetails => {
                     resolve(this.handleAccept(jsonDetails));
@@ -95,6 +97,15 @@ export class PaymentRequest {
         });
         this.state = 'closed';
         this.acceptPromiseRejecter(new DOMException(PaymentsErrorEnum.AbortError));
+    }
+    resetShippingMethodUpdater() {
+        if (!this.onUpdateShippingMethod)
+            return;
+        const cb = this.onUpdateShippingMethod;
+        NativePayments.onUpdateShippingMethod(async (_, shippingMethodId) => {
+            NativePayments.updateDisplayItems(await cb(shippingMethodId));
+            this.resetShippingMethodUpdater();
+        });
     }
     handleAccept(details) {
         try {

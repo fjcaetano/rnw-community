@@ -3,6 +3,13 @@
 #import <React/RCTLog.h>
 #import <Foundation/Foundation.h>
 
+@interface Payments()
+
+@property (nonatomic, copy) RCTResponseSenderBlock shippingMethodUpdater;
+@property (nonatomic, copy) void (^updateShippingMethodCompletion)(PKPaymentRequestShippingMethodUpdate *);
+
+@end
+
 // TODO: Add logs
 @implementation Payments
 
@@ -193,6 +200,20 @@ RCT_EXPORT_METHOD(canMakePayments: (NSString *)methodDataString
     resolve(@([PKPaymentAuthorizationViewController canMakePayments]));
 }
 
+RCT_EXPORT_METHOD(onUpdateShippingMethod:(RCTResponseSenderBlock)callback)
+{
+    self.shippingMethodUpdater = callback;
+}
+
+RCT_EXPORT_METHOD(updateDisplayItems:(NSArray *)displayItems)
+{
+    if (displayItems.count == 0 || !self.updateShippingMethodCompletion) return;
+
+    NSArray *summaryItems = [self getPaymentSummaryItemsFromDetails:@{ @"displayItems": displayItems }];
+    PKPaymentRequestShippingMethodUpdate *update = [[PKPaymentRequestShippingMethodUpdate alloc] initWithPaymentSummaryItems:summaryItems];
+    self.updateShippingMethodCompletion(update);
+}
+
 // DELEGATES https://developer.apple.com/documentation/passkit/pkpaymentauthorizationviewcontrollerdelegate?language=objc
 
 // https://developer.apple.com/documentation/passkit/pkpaymentauthorizationviewcontrollerdelegate/1616180-paymentauthorizationviewcontroll?language=objc
@@ -301,6 +322,14 @@ RCT_EXPORT_METHOD(canMakePayments: (NSString *)methodDataString
     self.paymentResolve = nil;
 }
 
+- (void)paymentAuthorizationViewController:(PKPaymentAuthorizationViewController *) controller
+                   didSelectShippingMethod:(PKShippingMethod *) shippingMethod
+                                   handler:(void (^)(PKPaymentRequestShippingMethodUpdate * requestUpdate)) completion
+{
+    self.updateShippingMethodCompletion = completion;
+    self.shippingMethodUpdater(@[[NSNull null], shippingMethod.identifier]);
+}
+
 // PRIVATE METHODS
 
 - (PKPaymentSummaryItem *_Nonnull)convertDisplayItemToPaymentSummaryItem:(NSDictionary *_Nonnull)displayItem;
@@ -323,8 +352,9 @@ RCT_EXPORT_METHOD(canMakePayments: (NSString *)methodDataString
         }
     }
 
-    NSDictionary *total = details[@"total"];
-    [paymentSummaryItems addObject: [self convertDisplayItemToPaymentSummaryItem:total]];
+    // Let's not handle this separately
+//    NSDictionary *total = details[@"total"];
+//    [paymentSummaryItems addObject: [self convertDisplayItemToPaymentSummaryItem:total]];
 
     return paymentSummaryItems;
 }
