@@ -8,7 +8,8 @@ export declare class PaymentRequest {
     readonly id: string;
     updating: boolean;
     state: 'closed' | 'created' | 'interactive';
-    onUpdateShippingMethod: ((shippingMethodId: string) => Promise<PaymentItem[]>) | undefined;
+    onUpdateShippingMethod?: (shippingMethodId: string) => Promise<PaymentItem[]>;
+    onUpdateShippingContact?: (shippingContact: object) => Promise<PaymentShippingOption[]>;
     private readonly serializedMethodData;
     private readonly platformMethodData;
     private acceptPromiseRejecter;
@@ -17,6 +18,7 @@ export declare class PaymentRequest {
     show(): Promise<AndroidPaymentResponse | IosPaymentResponse>;
     abort(): Promise<void>;
     private resetShippingMethodUpdater;
+    private resetShippingContactUpdater;
     private handleAccept;
     private findPlatformPaymentMethodData;
     private getAndroidPaymentMethodData;

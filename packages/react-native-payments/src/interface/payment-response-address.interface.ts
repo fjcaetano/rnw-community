@@ -4,6 +4,7 @@ export interface PaymentResponseAddressInterface {
     address2: string;
     address3: string;
     administrativeArea: string;
+    country: string;
     countryCode: string;
     locality: string;
     postalCode: string;

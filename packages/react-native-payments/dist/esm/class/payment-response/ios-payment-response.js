@@ -26,6 +26,7 @@ export class IosPaymentResponse extends PaymentResponse {
     static parsePKContact(input) {
         return {
             countryCode: input?.ISOCountryCode ?? '',
+            country: input?.country ?? '',
             postalCode: input?.postalCode ?? '',
             address1: input?.street ?? '',
             address2: input?.city ?? '',

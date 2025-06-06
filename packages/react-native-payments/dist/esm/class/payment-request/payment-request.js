@@ -32,7 +32,6 @@ export class PaymentRequest {
         this.details = details;
         this.updating = false;
         this.state = 'created';
-        this.onUpdateShippingMethod = undefined;
         this.acceptPromiseRejecter = emptyFn;
         // 3. Establish the request's id:
         if (!isNotEmptyString(details.id)) {
@@ -74,6 +73,7 @@ export class PaymentRequest {
                     }
                     : this.details;
                 this.resetShippingMethodUpdater();
+                this.resetShippingContactUpdater();
                 NativePayments.show(this.serializedMethodData, details)
                     .then(jsonDetails => {
                     resolve(this.handleAccept(jsonDetails));
@@ -99,12 +99,25 @@ export class PaymentRequest {
         this.acceptPromiseRejecter(new DOMException(PaymentsErrorEnum.AbortError));
     }
     resetShippingMethodUpdater() {
-        if (!this.onUpdateShippingMethod)
+        if (!this.onUpdateShippingMethod) {
             return;
+        }
         const cb = this.onUpdateShippingMethod;
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         NativePayments.onUpdateShippingMethod(async (_, shippingMethodId) => {
             NativePayments.updateDisplayItems(await cb(shippingMethodId));
             this.resetShippingMethodUpdater();
+        });
+    }
+    resetShippingContactUpdater() {
+        if (!this.onUpdateShippingContact) {
+            return;
+        }
+        const cb = this.onUpdateShippingContact;
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        NativePayments.onUpdateShippingContact(async (_, shippingContact) => {
+            NativePayments.updateShippingOptions(await cb(shippingContact));
+            this.resetShippingContactUpdater();
         });
     }
     handleAccept(details) {

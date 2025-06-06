@@ -4,6 +4,7 @@ export interface AndroidFullAddress extends AndroidMinAddress {
     address2?: string;
     address3?: string;
     administrativeArea?: string;
+    country?: string;
     locality?: string;
     sortingCode?: string;
 }

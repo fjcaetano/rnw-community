@@ -25,15 +25,16 @@ class IosPaymentResponse extends payment_response_1.PaymentResponse {
                 : ios_payment_data_1.emptyIosPaymentData });
     }
     static parsePKContact(input) {
-        var _a, _b, _c, _d, _e, _f, _g;
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         return {
             countryCode: (_a = input === null || input === void 0 ? void 0 : input.ISOCountryCode) !== null && _a !== void 0 ? _a : '',
-            postalCode: (_b = input === null || input === void 0 ? void 0 : input.postalCode) !== null && _b !== void 0 ? _b : '',
-            address1: (_c = input === null || input === void 0 ? void 0 : input.street) !== null && _c !== void 0 ? _c : '',
-            address2: (_d = input === null || input === void 0 ? void 0 : input.city) !== null && _d !== void 0 ? _d : '',
-            address3: (_e = input === null || input === void 0 ? void 0 : input.state) !== null && _e !== void 0 ? _e : '',
-            administrativeArea: (_f = input === null || input === void 0 ? void 0 : input.subAdministrativeArea) !== null && _f !== void 0 ? _f : '',
-            locality: (_g = input === null || input === void 0 ? void 0 : input.subLocality) !== null && _g !== void 0 ? _g : '',
+            country: (_b = input === null || input === void 0 ? void 0 : input.country) !== null && _b !== void 0 ? _b : '',
+            postalCode: (_c = input === null || input === void 0 ? void 0 : input.postalCode) !== null && _c !== void 0 ? _c : '',
+            address1: (_d = input === null || input === void 0 ? void 0 : input.street) !== null && _d !== void 0 ? _d : '',
+            address2: (_e = input === null || input === void 0 ? void 0 : input.city) !== null && _e !== void 0 ? _e : '',
+            address3: (_f = input === null || input === void 0 ? void 0 : input.state) !== null && _f !== void 0 ? _f : '',
+            administrativeArea: (_g = input === null || input === void 0 ? void 0 : input.subAdministrativeArea) !== null && _g !== void 0 ? _g : '',
+            locality: (_h = input === null || input === void 0 ? void 0 : input.subLocality) !== null && _h !== void 0 ? _h : '',
             sortingCode: '',
         };
     }

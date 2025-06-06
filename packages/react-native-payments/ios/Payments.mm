@@ -8,6 +8,9 @@
 @property (nonatomic, copy) RCTResponseSenderBlock shippingMethodUpdater;
 @property (nonatomic, copy) void (^updateShippingMethodCompletion)(PKPaymentRequestShippingMethodUpdate *);
 
+@property (nonatomic, copy) RCTResponseSenderBlock shippingContactUpdater;
+@property (nonatomic, copy) void (^updateShippingContactCompletion)(PKPaymentRequestShippingContactUpdate *);
+
 @end
 
 // TODO: Add logs
@@ -205,6 +208,11 @@ RCT_EXPORT_METHOD(onUpdateShippingMethod:(RCTResponseSenderBlock)callback)
     self.shippingMethodUpdater = callback;
 }
 
+RCT_EXPORT_METHOD(onUpdateShippingContact:(RCTResponseSenderBlock)callback)
+{
+    self.shippingContactUpdater = callback;
+}
+
 RCT_EXPORT_METHOD(updateDisplayItems:(NSArray *)displayItems)
 {
     if (displayItems.count == 0 || !self.updateShippingMethodCompletion) return;
@@ -212,6 +220,16 @@ RCT_EXPORT_METHOD(updateDisplayItems:(NSArray *)displayItems)
     NSArray *summaryItems = [self getPaymentSummaryItemsFromDetails:@{ @"displayItems": displayItems }];
     PKPaymentRequestShippingMethodUpdate *update = [[PKPaymentRequestShippingMethodUpdate alloc] initWithPaymentSummaryItems:summaryItems];
     self.updateShippingMethodCompletion(update);
+}
+
+
+RCT_EXPORT_METHOD(updateShippingOptions:(NSArray *)shippingMethods)
+{
+    if (shippingMethods.count == 0 || !self.updateShippingContactCompletion) return;
+
+    PKPaymentRequestShippingContactUpdate *update = [PKPaymentRequestShippingContactUpdate new];
+    update.shippingMethods = [self getPaymentShippingMethodsFromDetails:@{ @"shippingOptions": shippingMethods }];
+    self.updateShippingContactCompletion(update);
 }
 
 // DELEGATES https://developer.apple.com/documentation/passkit/pkpaymentauthorizationviewcontrollerdelegate?language=objc
@@ -327,7 +345,33 @@ RCT_EXPORT_METHOD(updateDisplayItems:(NSArray *)displayItems)
                                    handler:(void (^)(PKPaymentRequestShippingMethodUpdate * requestUpdate)) completion
 {
     self.updateShippingMethodCompletion = completion;
-    self.shippingMethodUpdater(@[[NSNull null], shippingMethod.identifier]);
+
+    if (self.shippingMethodUpdater) {
+        self.shippingMethodUpdater(@[NSNull.null, shippingMethod.identifier]);
+    }
+}
+
+- (void)paymentAuthorizationViewController:(PKPaymentAuthorizationViewController *) controller
+                  didSelectShippingContact:(PKContact *) contact
+                                   handler:(void (^)(PKPaymentRequestShippingContactUpdate * update)) completion
+{
+    self.updateShippingContactCompletion = completion;
+    if (self.shippingContactUpdater) {
+        self.shippingContactUpdater(@[NSNull.null, @{
+            @"email": contact.emailAddress ?: NSNull.null,
+            @"name": contact.name ?: NSNull.null,
+            @"phone": contact.phoneNumber.stringValue ?: NSNull.null,
+            @"administrativeArea": contact.postalAddress.state ?: NSNull.null,
+            @"country": contact.postalAddress.country ?: NSNull.null,
+            @"countryCode": contact.postalAddress.ISOCountryCode ?: NSNull.null,
+            @"locality": contact.postalAddress.city ?: NSNull.null,
+            @"postalCode": contact.postalAddress.postalCode ?: NSNull.null,
+            @"subAdministrativeArea": contact.postalAddress.subAdministrativeArea ?: NSNull.null,
+            @"subLocality": contact.postalAddress.subLocality ?: NSNull.null,
+            @"familyName": contact.name.familyName ?: NSNull.null,
+            @"givenName": contact.name.givenName ?: NSNull.null,
+        }]);
+    }
 }
 
 // PRIVATE METHODS

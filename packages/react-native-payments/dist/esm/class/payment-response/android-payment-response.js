@@ -48,6 +48,7 @@ export class AndroidPaymentResponse extends PaymentResponse {
     }
     static parseFullAddress(input) {
         return {
+            country: input?.country ?? '',
             countryCode: input?.countryCode ?? '',
             postalCode: input?.postalCode ?? '',
             address1: input?.address1 ?? '',

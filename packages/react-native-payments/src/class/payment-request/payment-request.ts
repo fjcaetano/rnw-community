@@ -42,7 +42,8 @@ export class PaymentRequest {
     updating = false;
     state: 'closed' | 'created' | 'interactive' = 'created';
 
-    onUpdateShippingMethod: ((shippingMethodId: string) => Promise<PaymentItem[]>) | undefined = undefined;
+    onUpdateShippingMethod?: (shippingMethodId: string) => Promise<PaymentItem[]>;
+    onUpdateShippingContact?: (shippingContact: object) => Promise<PaymentShippingOption[]>;
 
     // Internal Slots https://www.w3.org/TR/payment-request/#internal-slots
     private readonly serializedMethodData: string;
@@ -110,6 +111,7 @@ export class PaymentRequest {
                         : this.details;
 
                 this.resetShippingMethodUpdater();
+                this.resetShippingContactUpdater();
 
                 NativePayments.show(this.serializedMethodData, details)
                     .then(jsonDetails => {
@@ -140,13 +142,29 @@ export class PaymentRequest {
         this.acceptPromiseRejecter(new DOMException(PaymentsErrorEnum.AbortError));
     }
 
-    private resetShippingMethodUpdater() {
-        if (!this.onUpdateShippingMethod) return;
+    private resetShippingMethodUpdater(): void {
+        if (!this.onUpdateShippingMethod) {
+            return;
+        }
 
         const cb = this.onUpdateShippingMethod;
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         NativePayments.onUpdateShippingMethod(async (_, shippingMethodId) => {
             NativePayments.updateDisplayItems(await cb(shippingMethodId));
             this.resetShippingMethodUpdater();
+        });
+    }
+
+    private resetShippingContactUpdater(): void {
+        if (!this.onUpdateShippingContact) {
+            return;
+        }
+
+        const cb = this.onUpdateShippingContact;
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        NativePayments.onUpdateShippingContact(async (_, shippingContact) => {
+            NativePayments.updateShippingOptions(await cb(shippingContact));
+            this.resetShippingContactUpdater();
         });
     }
 

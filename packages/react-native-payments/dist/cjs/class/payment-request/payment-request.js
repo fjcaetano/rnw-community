@@ -35,7 +35,6 @@ class PaymentRequest {
         this.details = details;
         this.updating = false;
         this.state = 'created';
-        this.onUpdateShippingMethod = undefined;
         this.acceptPromiseRejecter = shared_1.emptyFn;
         // 3. Establish the request's id:
         if (!(0, shared_1.isNotEmptyString)(details.id)) {
@@ -73,6 +72,7 @@ class PaymentRequest {
                 const details = react_native_1.Platform.OS === 'android'
                     ? Object.assign(Object.assign({}, this.details), { environment: this.platformMethodData.environment }) : this.details;
                 this.resetShippingMethodUpdater();
+                this.resetShippingContactUpdater();
                 native_payments_1.NativePayments.show(this.serializedMethodData, details)
                     .then(jsonDetails => {
                     resolve(this.handleAccept(jsonDetails));
@@ -98,12 +98,25 @@ class PaymentRequest {
         this.acceptPromiseRejecter(new dom_exception_1.DOMException(payments_error_enum_1.PaymentsErrorEnum.AbortError));
     }
     resetShippingMethodUpdater() {
-        if (!this.onUpdateShippingMethod)
+        if (!this.onUpdateShippingMethod) {
             return;
+        }
         const cb = this.onUpdateShippingMethod;
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         native_payments_1.NativePayments.onUpdateShippingMethod(async (_, shippingMethodId) => {
             native_payments_1.NativePayments.updateDisplayItems(await cb(shippingMethodId));
             this.resetShippingMethodUpdater();
+        });
+    }
+    resetShippingContactUpdater() {
+        if (!this.onUpdateShippingContact) {
+            return;
+        }
+        const cb = this.onUpdateShippingContact;
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        native_payments_1.NativePayments.onUpdateShippingContact(async (_, shippingContact) => {
+            native_payments_1.NativePayments.updateShippingOptions(await cb(shippingContact));
+            this.resetShippingContactUpdater();
         });
     }
     handleAccept(details) {

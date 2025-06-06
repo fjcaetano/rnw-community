@@ -28,16 +28,17 @@ class AndroidPaymentResponse extends payment_response_1.PaymentResponse {
                 ? Object.assign(Object.assign({}, parsedToken.intermediateSigningKey), { signedKey: JSON.parse(parsedToken.intermediateSigningKey.signedKey) }) : android_intermediate_signing_key_1.emptyAndroidIntermediateSigningKey)), signedMessage: JSON.parse(parsedToken.signedMessage) });
     }
     static parseFullAddress(input) {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
         return {
-            countryCode: (_a = input === null || input === void 0 ? void 0 : input.countryCode) !== null && _a !== void 0 ? _a : '',
-            postalCode: (_b = input === null || input === void 0 ? void 0 : input.postalCode) !== null && _b !== void 0 ? _b : '',
-            address1: (_c = input === null || input === void 0 ? void 0 : input.address1) !== null && _c !== void 0 ? _c : '',
-            address2: (_d = input === null || input === void 0 ? void 0 : input.address2) !== null && _d !== void 0 ? _d : '',
-            address3: (_e = input === null || input === void 0 ? void 0 : input.address3) !== null && _e !== void 0 ? _e : '',
-            administrativeArea: (_f = input === null || input === void 0 ? void 0 : input.administrativeArea) !== null && _f !== void 0 ? _f : '',
-            locality: (_g = input === null || input === void 0 ? void 0 : input.locality) !== null && _g !== void 0 ? _g : '',
-            sortingCode: (_h = input === null || input === void 0 ? void 0 : input.sortingCode) !== null && _h !== void 0 ? _h : '',
+            country: (_a = input === null || input === void 0 ? void 0 : input.country) !== null && _a !== void 0 ? _a : '',
+            countryCode: (_b = input === null || input === void 0 ? void 0 : input.countryCode) !== null && _b !== void 0 ? _b : '',
+            postalCode: (_c = input === null || input === void 0 ? void 0 : input.postalCode) !== null && _c !== void 0 ? _c : '',
+            address1: (_d = input === null || input === void 0 ? void 0 : input.address1) !== null && _d !== void 0 ? _d : '',
+            address2: (_e = input === null || input === void 0 ? void 0 : input.address2) !== null && _e !== void 0 ? _e : '',
+            address3: (_f = input === null || input === void 0 ? void 0 : input.address3) !== null && _f !== void 0 ? _f : '',
+            administrativeArea: (_g = input === null || input === void 0 ? void 0 : input.administrativeArea) !== null && _g !== void 0 ? _g : '',
+            locality: (_h = input === null || input === void 0 ? void 0 : input.locality) !== null && _h !== void 0 ? _h : '',
+            sortingCode: (_j = input === null || input === void 0 ? void 0 : input.sortingCode) !== null && _j !== void 0 ? _j : '',
         };
     }
     static parseCardInfo(androidCardInfo) {
